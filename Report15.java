@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.util.*;
+import javax.swing.*;
 import javax.swing.event.*;
 
 class Direction
@@ -11,60 +11,64 @@ class Direction
     public static int LEFT  = 2;
     public static int RIGHT = 3;
 }
- 
-public class Report15 extends JFrame
+
+public class Report15 
 {
-    //private Panel panel;
     Pacman pacman = new Pacman();
-    public static void main(String[] args) {
-        Report15 repo = new Report15();
-        // 忘れやすいので注意
-        //repaint();
-    }
-
-    public Report15()
-    {
-        super("Report15");
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setSize(25*28, 25*31);
-        frame.setTitle("Pacman");
-        //panel = new Panel();
+    int N = 25;
+	public static void main(String[] args){
+		Report15 gui = new Report15();
+        gui.go();
+	}
+	
+	public void go()
+	{
+		JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MyDrawPanel drawPanel = new MyDrawPanel();
+        drawPanel.setBackground(Color.black);
+        frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
+        frame.setSize(28*N, 31*N);
         frame.setVisible(true);
-        frame.addKeyListener(new KeyInputController());
+        pacman.go();
+	}
+	
+	class MyDrawPanel extends JPanel implements ActionListener
+	{
+        javax.swing.Timer time;
+        
+        public MyDrawPanel()
+        {
+            time = new javax.swing.Timer(20, this);
+            time.start();
+        }
+		
+		public void actionPerformed(ActionEvent e) { repaint(); }
+        
+		public void paintComponent(Graphics g)
+		{
+			super.paintComponent(g);
+            System.out.println("x = " + pacman.getPositionX() + " y = " + pacman.getPositionY());
+            g.setColor(Color.yellow);
+            g.fillOval(pacman.getPositionX(), pacman.getPositionY(), N, N);
+		}
     }
 
-    // public class Panel extends JPanel 
-    // {
-    //     public Panel()
-    //     {
-            
-    //     }
-
-    //     public void paintComponet(Graphics g)
-    //     {
-    //         super.paintComponent(g);
-    //     }
-    // }
-public class KeyInputController implements KeyListener
-{
-    public void keyPressed(KeyEvent e)
+    class KeyInputController implements KeyListener
     {
-    // //キーコード取得
-    int keycode = e.getKeyCode();
+        public void keyPressed(KeyEvent e)
+        {
+            //キーコード取得
+            int keycode = e.getKeyCode();
+            if(keycode == KeyEvent.VK_UP)    pacman.changeDirection(Direction.UP);
+            if(keycode == KeyEvent.VK_DOWN)  pacman.changeDirection(Direction.DOWN);
+            if(keycode == KeyEvent.VK_LEFT)  pacman.changeDirection(Direction.LEFT);
+            if(keycode == KeyEvent.VK_RIGHT) pacman.changeDirection(Direction.RIGHT);
+        }
 
-        if(keycode == KeyEvent.VK_UP) pacman.changeDirection(Direction.UP);
-        if(keycode == KeyEvent.VK_DOWN) pacman.changeDirection(Direction.DOWN);
-        if(keycode == KeyEvent.VK_LEFT) pacman.changeDirection(Direction.LEFT);
-        if(keycode == KeyEvent.VK_RIGHT) pacman.changeDirection(Direction.RIGHT);
+        @Override
+        public void keyReleased(KeyEvent e){}
+        // @Override
+        public void keyTyped(KeyEvent event){}
     }
-
-    @Override
-    public void keyReleased(KeyEvent e){}
-    // @Override
-    public void keyTyped(KeyEvent event){}
-        
 }
-        
-}  
-    

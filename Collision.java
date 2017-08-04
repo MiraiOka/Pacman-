@@ -1,3 +1,4 @@
-public class Collision{
+public class Collision
+{
     
 }

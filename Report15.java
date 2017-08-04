@@ -15,7 +15,7 @@ class Direction
 public class Report15 
 {
     Pacman pacman = new Pacman();
-    int N = 25;
+    public static int N = 25;
 	public static void main(String[] args){
 		Report15 gui = new Report15();
         gui.go();
@@ -29,8 +29,8 @@ public class Report15
         drawPanel.setBackground(Color.black);
         frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
         frame.setSize(28*N, 31*N);
+        frame.addKeyListener(new KeyInputController());
         frame.setVisible(true);
-        pacman.go();
 	}
 	
 	class MyDrawPanel extends JPanel implements ActionListener
@@ -43,14 +43,19 @@ public class Report15
             time.start();
         }
 		
-		public void actionPerformed(ActionEvent e) { repaint(); }
+        public void actionPerformed(ActionEvent e) 
+        {
+            repaint(); 
+            pacman.move();
+        }
         
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
-            System.out.println("x = " + pacman.getPositionX() + " y = " + pacman.getPositionY());
+            //System.out.println("x = " + pacman.getPositionX() + " y = " + pacman.getPositionY());
             g.setColor(Color.yellow);
-            g.fillOval(pacman.getPositionX(), pacman.getPositionY(), N, N);
+            g.fillOval(pacman.getPositionX()-N/2, pacman.getPositionY()-N/2, N, N);
+
 		}
     }
 

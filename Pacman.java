@@ -8,35 +8,26 @@ public class Pacman
 {
     private int positionX = 14, positionY = 24, direction;
     private boolean isInvincible;
-
-    public void go()
-    {
-        while(true)
-        {
-            move();
-        }
-    }
     
 
     public void move()
     {
         switch (direction){
             case 0:
-            if(positionY <= 0) return;
-            positionY--;
-            System.out.println("aaaaaaaaaaaaaaaa");
+            if(positionY <= 0 * Report15.N + Report15.N/2) return;
+            positionY -= 2;
             break;
             case 1:
-            if(positionY > 31) return;
-            positionY++;
+            if(positionY > 31 * Report15.N - Report15.N/2) return;
+            positionY += 2;
             break;
             case 2:
-            if(positionX <= 0) return;
-            positionX--;
+            if(positionX <= 0 * Report15.N + Report15.N/2) return;
+            positionX -= 2;
             break;
             case 3:
-            if(positionX > 28) return;
-            positionX++;
+            if(positionX > 28 * Report15.N - Report15.N/2) return;
+            positionX += 2;
             break;
         }
     }

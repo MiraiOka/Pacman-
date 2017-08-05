@@ -22,15 +22,12 @@ public class Stage
                 line = br.readLine();
             }
             br.close();
-            //CSVから読み込んだ配列の中身を表示
+            
             for(int row = 0; row < ROW_Y; row++) {
                 for(int col = 0; col < COL_X; col++) {
                     cell[row][col] = Integer.parseInt(data[row][col]); 
-                    //System.out.print(cell[row][col]);
                 }
-                //System.out.println();
             }
-            
             return cell;
         } catch (IOException e) {
             System.out.println(e);

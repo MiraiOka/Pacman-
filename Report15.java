@@ -15,6 +15,7 @@ class Direction
 public class Report15 
 {
     Pacman pacman = new Pacman();
+    Ghost[] ghosts = new Ghost[4];
     public static int N = 25;
     int[][] stageCell;
 	public static void main(String[] args){
@@ -24,11 +25,11 @@ public class Report15
 	
 	public void go()
 	{
+        for(int i = 0; i < ghosts.length; i++) ghosts[i] = new Ghost();
         JFrame frame = new JFrame();
         stageCell = Stage.readCSV();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MyDrawPanel drawPanel = new MyDrawPanel();
-        //drawPanel.setBackground(Color.black);
         frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
         frame.setSize(28 * N, 31 * N);
         frame.addKeyListener(new KeyInputController());
@@ -49,13 +50,13 @@ public class Report15
         {
             repaint(); 
             pacman.move();
+            for(Ghost ghost: ghosts) ghost.move();
         }
         
 		public void paintComponent(Graphics g)
 		{
             super.paintComponent(g);
             boolean[][] pacmanPosition = pacman.getPosition();
-            //System.out.println("x = " + pacman.getPositionX() + " y = " + pacman.getPositionY());
             for(int row = 0; row < Stage.ROW_Y; row++){
                 for(int col = 0; col < Stage.COL_X; col++){
                     switch(stageCell[row][col]){
@@ -80,12 +81,37 @@ public class Report15
                 }
             }
 
+            for(Ghost ghost: ghosts)
+            {
+                for(int row = 0; row < Stage.ROW_Y; row++){
+                    for(int col = 0; col < Stage.COL_X; col++){
+                        g.setColor(Color.blue);
+                        boolean[][] ghostPosition = ghost.getPosition();                            
+                        if(ghostPosition[row][col]) {
+                            
+                            g.fillOval(col * N, row * N, N, N);
+                        }
+                    }
+                }
+            }
+
             for(int row = 0; row < Stage.ROW_Y; row++){
                 for(int col = 0; col < Stage.COL_X; col++){
                     g.setColor(Color.yellow);
                     if(pacmanPosition[row][col]) {
                         g.fillOval(col * N, row * N, N, N);
-                        System.out.println("row = " + row + " col = " + col);
+                        stageCell[row][col] = 3;
+                    }
+                }
+            }
+
+            for(int row = 0; row < Stage.ROW_Y; row++) {
+                for(int col = 0; col < Stage.COL_X; col++) {
+                    for(Ghost ghost: ghosts){
+                        if(pacman.getPositionX() == ghost.getPositionX() && pacman.getPositionY() == ghost.getPositionY()){
+                            pacman.gameOver();
+                            for(Ghost ghost2: ghosts) ghost2.gameOver();
+                        } 
                     }
                 }
             }
@@ -96,7 +122,6 @@ public class Report15
     {
         public void keyPressed(KeyEvent e)
         {
-            //キーコード取得
             int keycode = e.getKeyCode();
             if(keycode == KeyEvent.VK_UP)    pacman.changeDirection(Direction.UP);
             if(keycode == KeyEvent.VK_DOWN)  pacman.changeDirection(Direction.DOWN);
@@ -104,9 +129,8 @@ public class Report15
             if(keycode == KeyEvent.VK_RIGHT) pacman.changeDirection(Direction.RIGHT);
         }
 
-        @Override
         public void keyReleased(KeyEvent e){}
-        // @Override
+        
         public void keyTyped(KeyEvent event){}
     }
 }

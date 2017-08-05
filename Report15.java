@@ -30,7 +30,7 @@ public class Report15
         MyDrawPanel drawPanel = new MyDrawPanel();
         //drawPanel.setBackground(Color.black);
         frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
-        frame.setSize(28*N, 31*N);
+        frame.setSize(28 * N, 31 * N);
         frame.addKeyListener(new KeyInputController());
         frame.setVisible(true);
 	}
@@ -41,7 +41,7 @@ public class Report15
         
         public MyDrawPanel()
         {
-            time = new javax.swing.Timer(20, this);
+            time = new javax.swing.Timer(100, this);
             time.start();
         }
 		
@@ -53,29 +53,42 @@ public class Report15
         
 		public void paintComponent(Graphics g)
 		{
-			super.paintComponent(g);
+            super.paintComponent(g);
+            boolean[][] pacmanPosition = pacman.getPosition();
             //System.out.println("x = " + pacman.getPositionX() + " y = " + pacman.getPositionY());
-            for(int row = 0; row < Stage.ROW; row++){
-                for(int col = 0; col < Stage.COL; col++){
+            for(int row = 0; row < Stage.ROW_Y; row++){
+                for(int col = 0; col < Stage.COL_X; col++){
                     switch(stageCell[row][col]){
                         case 0:
                         g.setColor(Color.blue);
                         break;
+
                         case 1:
                         g.setColor(Color.red);
                         break;
+
                         case 2:
                         g.setColor(Color.pink);
                         break;
+
                         case 3:
                         g.setColor(Color.black);
                         break;
                     }
                     g.fillRect(col * N, row * N, N, N);
+                    
                 }
             }
-            g.setColor(Color.yellow);
-            g.fillOval(pacman.getPositionX()-N/2, pacman.getPositionY()-N/2, N, N);
+
+            for(int row = 0; row < Stage.ROW_Y; row++){
+                for(int col = 0; col < Stage.COL_X; col++){
+                    g.setColor(Color.yellow);
+                    if(pacmanPosition[row][col]) {
+                        g.fillOval(col * N, row * N, N, N);
+                        System.out.println("row = " + row + " col = " + col);
+                    }
+                }
+            }
 		}
     }
 

@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 //import java.awt.event.*;
 
 //import javax.naming.directory.DirContext;
@@ -6,36 +8,45 @@
 
 public class Pacman
 {
-    private int positionX = 14 * Report15.N, positionY = 24 * Report15.N, direction;
+    private int positionX = 14, positionY = 24, direction;
     private boolean isInvincible;
+    private boolean[][] existPosition = new boolean[Stage.ROW_Y][Stage.COL_X];
     
+    public Pacman()
+    {
+        //Arrays.fill(existPosition, false);
+        existPosition[positionY][positionX] = true;
+    }
 
     public void move()
     {
         switch (direction){
             case 0:
-            int cell = Stage.getCell(positionY/Report15.N - 1, positionX/Report15.N);
-            System.out.println(cell);
-            if(/*positionY <= 0 * Report15.N + Report15.N/2 &&*/ cell == 0) return;
-            positionY -= 2;
+            if(positionY <= 0 || Stage.getCell(positionX, positionY-1) == 0) return;
+            existPosition[positionY][positionX] = false;
+            positionY--;
+            existPosition[positionY][positionX] = true;
             break;
+
             case 1:
-            cell = Stage.getCell(positionY/Report15.N + 1, positionX/Report15.N);
-            System.out.println(cell);
-            if(/*positionY > 31 * Report15.N - Report15.N/2 &&*/ cell == 0) return;
-            positionY += 2;
+            if(positionY >= Stage.ROW_Y || Stage.getCell(positionX, positionY+1) == 0) return;
+            existPosition[positionY][positionX] = false;
+            positionY++;
+            existPosition[positionY][positionX] = true;
             break;
+
             case 2:
-            cell = Stage.getCell(positionY/Report15.N, positionX/Report15.N - 1);
-            System.out.println(cell);
-            if(/*positionX <= 0 * Report15.N + Report15.N/2 &&*/ cell == 0) return;
-            positionX -= 2;
+            if(positionX <= 0 || Stage.getCell(positionX-1, positionY) == 0) return;
+            existPosition[positionY][positionX] = false;
+            positionX--;
+            existPosition[positionY][positionX] = true;
             break;
+
             case 3:
-            cell = Stage.getCell(positionY/Report15.N, positionX/Report15.N + 1);
-            System.out.println(cell);
-            if(/*positionX > 28 * Report15.N - Report15.N/2 &&*/ cell == 0) return;
-            positionX += 2;
+            if(positionX >= Stage.COL_X || Stage.getCell(positionX+1, positionY) == 0) return;
+            existPosition[positionY][positionX] = false;
+            positionX++;
+            existPosition[positionY][positionX] = true;
             break;
         }
     }
@@ -45,15 +56,12 @@ public class Pacman
         this.direction = direction;
     }
 
-    public int getPositionX()
+    public boolean[][] getPosition()
     {
-        return positionX;
+        return existPosition;
     }
 
-    public int getPositionY()
-    {
-        return positionY;
-    }
+    
 //これ↓いる？
     public void eatGhost()//パックマンが無敵状態の時かつゴーストと衝突した時
     {
